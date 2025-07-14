@@ -26,7 +26,7 @@ export interface State extends fromRoot.State {
 export function reducers(state: BooksState | undefined, action: Action) {
   return combineReducers({
     [fromSearch.searchFeatureKey]: fromSearch.reducer,
-    [fromBooks.favoritesFeatureKey]: fromBooks.reducer,
+    [fromBooks.booksFeatureKey]: fromBooks.reducer,
     [fromCollection.collectionFeatureKey]: fromCollection.reducer,
   })(state, action);
 }
@@ -65,7 +65,7 @@ export const selectBooksState =
  */
 export const selectBookEntitiesState = createSelector(
   selectBooksState,
-  (state) => state[fromBooks.favoritesFeatureKey]
+  (state) => state.books
 );
 
 export const selectSelectedBookId = createSelector(
@@ -82,6 +82,7 @@ export const selectSelectedBookId = createSelector(
  * in selecting records from the entity state.
  */
 export const {
+  selectIds: selectBookIds,
   selectEntities: selectBookEntities,
   selectAll: selectAllBooks,
   selectTotal: selectTotalBooks,

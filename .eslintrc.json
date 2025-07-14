@@ -1,35 +1,57 @@
 {
-  "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*", "**/environment.prod.ts"],
+  "root": true,
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nx"],
   "overrides": [
     {
-      "files": ["*.ts"],
-      "extends": [
-        "plugin:@nx/angular",
-        "plugin:@angular-eslint/template/process-inline-templates"
-      ],
-      "parserOptions": {
-        "project": ["projects/example-app/tsconfig.*?.json"]
-      },
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@angular-eslint/directive-selector": [
+        "@nx/enforce-module-boundaries": [
           "error",
           {
-            "type": "attribute",
-            "prefix": "bc",
-            "style": "camelCase"
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
           }
         ],
-        "@angular-eslint/component-selector": [
-          "error",
+        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/no-inferrable-types": "warn"
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
+      "rules": {
+        "no-extra-semi": "off"
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
+      "rules": {
+        "no-extra-semi": "off"
+      }
+    },
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "warn",
           {
-            "type": "element",
-            "prefix": "bc",
-            "style": "kebab-case"
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_",
+            "caughtErrorsIgnorePattern": "^_"
           }
         ],
+        "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/prefer-namespace-keyword": "error",
-        "@nx/enforce-module-boundaries": "off",
+        "@typescript-eslint/no-empty-function": "warn",
+        "@typescript-eslint/no-empty-object-type": "warn",
         "eqeqeq": ["off", "smart"],
         "id-blacklist": [
           "error",
@@ -45,17 +67,17 @@
         ],
         "id-match": "error",
         "no-eval": "off",
-        "no-redeclare": "error",
-        "no-underscore-dangle": "error",
+        "no-redeclare": "off",
+        "no-underscore-dangle": "off",
         "no-var": "error",
-        "no-case-declarations": "off",
-        "@angular-eslint/prefer-standalone": "off"
+        "no-prototype-builtins": "off",
+        "@typescript-eslint/no-wrapper-object-types": "off",
+        "@typescript-eslint/no-unsafe-function-type": "off"
       },
-      "plugins": ["@typescript-eslint"]
+      "plugins": ["eslint-plugin-import", "@typescript-eslint"]
     },
     {
       "files": ["*.html"],
-      "extends": ["plugin:@nx/angular-template"],
       "rules": {}
     }
   ]
