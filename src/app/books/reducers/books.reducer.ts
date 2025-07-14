@@ -6,6 +6,7 @@ import { BookActions } from '@example-app/books/actions/book.actions';
 import { CollectionApiActions } from '@example-app/books/actions/collection-api.actions';
 import { ViewBookPageActions } from '@example-app/books/actions/view-book-page.actions';
 import { Book } from '@example-app/books/models';
+import { FavoriteActions } from '../actions/book.actions';
 
 export const booksFeatureKey = 'books';
 
@@ -18,6 +19,7 @@ export const booksFeatureKey = 'books';
  */
 export interface State extends EntityState<Book> {
   selectedBookId: string | null;
+  favorites: string[];
 }
 
 /**
@@ -40,6 +42,7 @@ export const adapter: EntityAdapter<Book> = createEntityAdapter<Book>({
  */
 export const initialState: State = adapter.getInitialState({
   selectedBookId: null,
+  favorites: [],
 });
 
 export const reducer = createReducer(
@@ -67,6 +70,17 @@ export const reducer = createReducer(
   on(ViewBookPageActions.selectBook, (state, { id }) => ({
     ...state,
     selectedBookId: id,
+  })),
+
+  on(FavoriteActions.addFavorite, (state, { bookId }) => ({
+    ...state,
+    favorites: state.favorites.includes(bookId)
+      ? state.favorites
+      : [...state.favorites, bookId],
+  })),
+  on(FavoriteActions.removeFavorite, (state, { bookId }) => ({
+    ...state,
+    favorites: state.favorites.filter(id => id !== bookId),
   }))
 );
 

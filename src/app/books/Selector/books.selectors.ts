@@ -1,23 +1,14 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import * as fromFavorites from '../reducers/books.reducer';
+import * as fromBooks from '../reducers/books.reducer';
 
-// Feature selector
-export const selectFavoritesState = createFeatureSelector<fromFavorites.FavoritesState>(
-  fromFavorites.favoritesFeatureKey
+export const selectBooksState = createFeatureSelector<fromBooks.State>('books');
+
+export const selectFavorites = createSelector(
+  selectBooksState,
+  (state) => state.favorites ?? []
 );
 
-// Re-exports from Entity
-export const selectAllFavoriteBooks = createSelector(
-  selectFavoritesState,
-  fromFavorites.selectAll
-);
-export const selectFavoriteEntities = createSelector(
-  selectFavoritesState,
-  fromFavorites.selectEntities
-);
-
-// Is favorite
 export const isFavoriteBook = (bookId: string) => createSelector(
-  selectFavoriteEntities,
-  (entities) => !!entities[bookId]
+  selectFavorites,
+  (favorites) => (favorites ?? []).includes(bookId)
 );

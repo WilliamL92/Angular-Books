@@ -8,3 +8,11 @@ export const BookActions = createActionGroup({
     'Load Book': props<{ book: Book }>(),
   },
 });
+
+export const FavoriteActions = createActionGroup({
+  source: 'Book Favorite',
+  events: {
+    'Add Favorite': props<{ bookId: string }>(),
+    'Remove Favorite': props<{ bookId: string }>(),
+  },
+});

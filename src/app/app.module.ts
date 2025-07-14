@@ -74,7 +74,6 @@ import { AppComponent } from '@example-app/core/containers';
      * See: https://ngrx.io/guide/effects#registering-root-effects
      */
     EffectsModule.forRoot(UserEffects, RouterEffects),
-    CoreModule,
   ],
   bootstrap: [AppComponent],
 })

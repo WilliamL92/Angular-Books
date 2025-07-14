@@ -1,6 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable, firstValueFrom } from 'rxjs';
 
 import { Book } from '@example-app/books/models';
+import { FavoriteActions } from '@example-app/books/actions/book.actions';
+import { isFavoriteBook } from '@example-app/books/Selector/books.selectors';
 
 @Component({
   selector: 'bc-book-preview',
@@ -25,7 +29,12 @@ import { Book } from '@example-app/books/models';
         <mat-card-footer>
           <bc-book-authors [book]="book"></bc-book-authors>
         </mat-card-footer>
-        <img mat-card-image src="./assets/favorite_empty.png" class="favorite-icon" />
+        <img
+          mat-card-image
+          [src]="(isFavorite$ | async) === true ? './assets/favorite_filled.png' : './assets/favorite_empty.png'"
+          class="favorite-icon"
+          (click)="toggleFavorite($event)"
+        />
       </mat-card>
     </a>
   `,
@@ -87,6 +96,13 @@ import { Book } from '@example-app/books/models';
 })
 export class BookPreviewComponent {
   @Input() book!: Book;
+  isFavorite$!: Observable<boolean>;
+
+  constructor(private store: Store) {}
+
+  ngOnInit() {
+    this.isFavorite$ = this.store.select(isFavoriteBook(this.book.id));
+  }
 
   get id() {
     return this.book.id;
@@ -113,5 +129,17 @@ export class BookPreviewComponent {
     }
 
     return false;
+  }
+
+  async toggleFavorite(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const isFavorite = await firstValueFrom(this.isFavorite$);
+    console.log(isFavorite);
+    if (isFavorite) {
+      this.store.dispatch(FavoriteActions.removeFavorite({ bookId: this.book.id }));
+    } else {
+      this.store.dispatch(FavoriteActions.addFavorite({ bookId: this.book.id }));
+    }
   }
 }

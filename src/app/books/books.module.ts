@@ -5,6 +5,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
 import { BooksRoutingModule } from '@example-app/books/books-routing.module';
+
 import {
   BookAuthorsComponent,
   BookDetailComponent,
@@ -20,7 +21,7 @@ import {
 } from '@example-app/books/containers';
 import { BookEffects, CollectionEffects } from '@example-app/books/effects';
 
-import * as fromBooks from '@example-app/books/reducers';
+import * as fromBooks from '@example-app/books/reducers/books.reducer';
 import { MaterialModule } from '@example-app/material';
 import { PipesModule } from '@example-app/shared/pipes';
 
@@ -51,7 +52,7 @@ export const CONTAINERS = [
      * eagerly or lazily and will be dynamically added to
      * the existing state.
      */
-    StoreModule.forFeature(fromBooks.booksFeatureKey, fromBooks.reducers),
+    StoreModule.forFeature(fromBooks.booksFeatureKey, fromBooks.reducer),
 
     /**
      * Effects.forFeature is used to register effects
